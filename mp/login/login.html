@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
+    body {    
+      position: absolute;
+      display:flex;
+      margin: 0;
+      overflow: hidden;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    #background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #222;
+    }
+    .ring {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+background-color: transparent;
+}
+.ring i {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #fff;
+  transition: 0.5s;
+  backdrop-filter: blur(3px) saturate(133%);
+  -webkit-backdrop-filter: blur(3px) saturate(133%);
+    background-color: rgba(124, 124, 129, 0.31);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+.ring i:nth-child(1) {
+  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+  animation: animate 6s linear infinite;
+}
+.ring i:nth-child(2) {
+  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  animation: animate 4s linear infinite;
+}
+.ring i:nth-child(3) {
+  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  animation: animate2 10s linear infinite;
+}
+.ring:hover i {
+  border: 6px solid var(--clr);
+  filter: drop-shadow(0 0 20px var(--clr));
+}
+@keyframes animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes animate2 {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+.login {
+  position: absolute;
+  width: 300px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+.login h2 {
+  font-size: 2em;
+  color: #fff;
+}
+.login .inputBx {
+  position: relative;
+  width: 100%;
+}
+.login .inputBx input {
+  position: relative;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  font-size: 1.2em;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+  backdrop-filter: blur(6px) saturate(133%);
+    -webkit-backdrop-filter: blur(6px) saturate(133%);
+    background-color: rgba(34, 34, 37, 0.51);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+.login .inputBx input[type="submit"] {
+  width: 100%;
+  background: #0078ff;
+  background: linear-gradient(45deg, #ff357a, #fff172);
+  border: none;
+  cursor: pointer;
+}
+.login .inputBx input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+.login .links {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.login .links a {
+  color: #fff;
+  text-decoration: none;
+}
+  </style>
+  <script src = "matter.js"></script>
+</head>
+<body>
+  <div id="background"></div>
+  <div class="ring">
+    <i style="--clr:#00ff0a;"></i>
+    <i style="--clr:#ff0057;"></i>
+    <i style="--clr:#fffd44;"></i>
+    <div class="login">
+      <h2>Login</h2>
+	 <div class="inputBx">
+        <input type="text" placeholder="Username">
+      </div>
+      <div class="inputBx">
+        <input type="password" placeholder="Password">
+      </div>
+      <div class="inputBx">
+        <input type="submit" value="Sign in">
+      </div>
+      <div class="links">
+        <a href="#">Forgot Password</a>
+        <a href="#">Signup</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    const { Engine, World, Bodies, Mouse, MouseConstraint } = Matter;
+
+    const engine = Engine.create({
+      gravity: {
+        x: 0,
+        y: 1,
+      },
+    });
+
+    const render = Matter.Render.create({
+      element: document.getElementById('background'),
+      engine: engine,
+      options: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        wireframes: false,
+        background: 'transparent',
+      },
+    });
+
+// Create shapes and objects
+const objects = [];
+
+// Circles
+for (let i = 0; i < 35; i++) {
+  const radius = Math.random() * 30 + 20;
+  const x = Math.random() * window.innerWidth;
+  const y = Math.random() * window.innerHeight;
+  const color = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+  const circle = Bodies.circle(x, y, radius, {
+    restitution: 0.5,
+    friction: 0.1,
+    density: 0.01,
+    render: {
+      fillStyle: color,
+    },
+  });
+  objects.push(circle);
+}
+
+// Rectangles
+for (let i = 0; i < 35; i++) {
+  const width = Math.random() * 40 + 20;
+  const height = Math.random() * 40 + 20;
+  const x = Math.random() * window.innerWidth;
+  const y = Math.random() * window.innerHeight;
+  const color = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+  const rectangle = Bodies.rectangle(x, y, width, height, {
+    restitution: 0.5,
+    friction: 0.1,
+    density: 0.01,
+    render: {
+      fillStyle: color,
+    },
+  });
+  objects.push(rectangle);
+}
+
+// Polygons
+for (let i = 0; i < 35; i++) {
+  const sides = Math.round(Math.random() * 3) + 3; // Random number of sides (3 to 6)
+  const radius = Math.random() * 30 + 20;
+  const x = Math.random() * window.innerWidth;
+  const y = Math.random() * window.innerHeight;
+  const color = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+  const polygon = Bodies.polygon(x, y, sides, radius, {
+    restitution: 0.5,
+    friction: 0.1,
+    density: 0.01,
+    render: {
+      fillStyle: color,
+    },
+  });
+  objects.push(polygon);
+}
+
+//shapes to world
+World.add(engine.world, objects);
+
+    const wallOptions = {
+      isStatic: true,
+      render: {
+        visible: false,
+      },
+    };
+
+    const walls = [
+      Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, wallOptions),
+      Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, wallOptions),
+      Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, wallOptions),
+      Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, wallOptions),
+    ];
+
+    World.add(engine.world, walls);
+
+    const mouse = Mouse.create(render.canvas);
+    const mouseConstraint = MouseConstraint.create(engine, {
+      mouse: mouse,
+    });
+
+    World.add(engine.world, mouseConstraint);
+
+    window.addEventListener('resize', () => {
+      Matter.Render.canvasSize(render, window.innerWidth, window.innerHeight);
+    });
+
+    Engine.run(engine);
+    Matter.Render.run(render);
+  </script>
+</body>
+</html>
