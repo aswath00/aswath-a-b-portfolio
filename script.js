@@ -40,3 +40,19 @@ for (var i = 0; i < navLinks.length; i++) {
     menuBtn.style.pointerEvents = "auto";
   });
 }
+document.addEventListener("scroll", function() {
+  let progressFills = document.querySelectorAll(".progress-fill");
+
+  progressFills.forEach(fill => {
+    let fillTop = fill.getBoundingClientRect().top;
+    let screenHeight = window.innerHeight;
+
+    if (fillTop < screenHeight - 50) {
+      let targetWidth = fill.getAttribute("data-width");
+      if (fill.style.width === "0px" || fill.style.width === "") {
+        fill.style.width = targetWidth;
+      }
+    }
+  });
+});
+
